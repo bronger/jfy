@@ -13,17 +13,12 @@ import (
 	"github.com/bronger/jfy/ls"
 )
 
+var logger = log.New(os.Stderr, "", 0)
+
 type Dispatcher func(stdout, stderr []byte, args ...string) (any, any, error)
 
-var (
-	Dispatchers map[string]Dispatcher
-	logger      *log.Logger
-)
-
-func init() {
-	logger = log.New(os.Stderr, "", 0)
-	Dispatchers = make(map[string]Dispatcher)
-	Dispatchers["true"] = ls.Handle
+var Dispatchers = map[string]Dispatcher{
+	"true": ls.Handle,
 }
 
 func main() {
