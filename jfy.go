@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"os/signal"
@@ -12,10 +13,16 @@ import (
 	"github.com/bronger/jfy/ls"
 )
 
-var Dispatchers map[string]func(stdout, stderr []byte, args ...string) any
+type Dispatcher func(stdout, stderr []byte, args ...string) (any, any, error)
+
+var (
+	Dispatchers map[string]Dispatcher
+	logger      *log.Logger
+)
 
 func init() {
-	Dispatchers = make(map[string]func(stdout, stderr []byte, args ...string) any)
+	logger = log.New(os.Stderr, "", 0)
+	Dispatchers = make(map[string]Dispatcher)
 	Dispatchers["true"] = ls.Handle
 }
 
@@ -53,9 +60,18 @@ func main() {
 	if handler == nil {
 		panic("No handler found")
 	}
-	if data, err := json.Marshal(handler(stdout, stderr, os.Args[2:]...)); err != nil {
+	if data, dataErr, err := handler(stdout, stderr, os.Args[2:]...); err != nil {
 		panic(err)
 	} else {
-		fmt.Printf("%s", data)
+		if serializedJSON, err := json.Marshal(data); err != nil {
+			panic(err)
+		} else {
+			fmt.Printf("%s\n", serializedJSON)
+		}
+		if serializedJSON, err := json.Marshal(dataErr); err != nil {
+			panic(err)
+		} else {
+			logger.Printf("%s", serializedJSON)
+		}
 	}
 }
