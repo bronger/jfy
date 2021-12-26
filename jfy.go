@@ -2,12 +2,22 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"os"
 	"os/exec"
 	"os/signal"
 	"time"
+
+	"github.com/bronger/jfy/ls"
 )
+
+var Dispatchers map[string]func(stdout, stderr []byte, args ...string) any
+
+func init() {
+	Dispatchers = make(map[string]func(stdout, stderr []byte, args ...string) any)
+	Dispatchers["true"] = ls.Handle
+}
 
 func main() {
 	cmd := exec.Command(os.Args[1], os.Args[2:]...)
@@ -38,6 +48,14 @@ func main() {
 		}
 	}
 	stdout := stdoutBuf.Bytes()
-	//	stderr := stderrBuf.Bytes()
-	fmt.Printf("%s", stdout)
+	stderr := stderrBuf.Bytes()
+	handler := Dispatchers[os.Args[1]]
+	if handler == nil {
+		panic("No handler found")
+	}
+	if data, err := json.Marshal(handler(stdout, stderr, os.Args[2:]...)); err != nil {
+		panic(err)
+	} else {
+		fmt.Printf("%s", data)
+	}
 }
