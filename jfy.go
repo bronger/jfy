@@ -40,13 +40,15 @@ func main() {
 	cmd.Stdout = &stdoutBuf
 	cmd.Stderr = &stderrBuf
 	if err := cmd.Start(); err != nil {
-		panic(err)
+		logger.Println(err)
+		os.Exit(221)
 	}
 	if err := cmd.Wait(); err != nil {
 		if ee, ok := err.(*exec.ExitError); ok {
 			os.Exit(ee.ProcessState.ExitCode())
 		} else {
-			panic(err)
+			logger.Println(err)
+			os.Exit(221)
 		}
 	}
 	stdout := stdoutBuf.Bytes()
@@ -56,15 +58,18 @@ func main() {
 		panic("No handler found")
 	}
 	if data, dataErr, err := handler(stdout, stderr, os.Args[2:]...); err != nil {
-		panic(err)
+		logger.Println(err)
+		os.Exit(221)
 	} else {
 		if serializedJSON, err := json.Marshal(data); err != nil {
-			panic(err)
+			logger.Println(err)
+			os.Exit(221)
 		} else {
 			fmt.Printf("%s\n", serializedJSON)
 		}
 		if serializedJSON, err := json.Marshal(dataErr); err != nil {
-			panic(err)
+			logger.Println(err)
+			os.Exit(221)
 		} else {
 			logger.Printf("%s", serializedJSON)
 		}
