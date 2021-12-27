@@ -10,25 +10,20 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/bronger/jfy/lib"
 	"github.com/bronger/jfy/ls"
 )
 
 var logger = log.New(os.Stderr, "", 0)
 
-type dispatcher func(stdout, stderr []byte, args ...string) (any, any, error)
-
-var dispatchers = map[string]dispatcher{
+var dispatchers = map[string]lib.Dispatcher{
 	"true": ls.Handle,
 }
 
-type settingsType struct {
-	ExitCode int
-}
-
-var settings settingsType
+var settings lib.SettingsType
 
 func init() {
-	settings = settingsType{ExitCode: 221}
+	settings = lib.SettingsType{ExitCode: 221}
 	data := os.Getenv("JFY_SETTINGS")
 	if data != "" {
 		if err := json.Unmarshal([]byte(data), &settings); err != nil {
@@ -82,7 +77,7 @@ func main() {
 	if handler == nil {
 		panic("No handler found")
 	}
-	if data, dataErr, err := handler(stdout, stderr, os.Args[2:]...); err != nil {
+	if data, dataErr, err := handler(settings, stdout, stderr, os.Args[2:]...); err != nil {
 		logger.Println(err)
 		os.Exit(settings.ExitCode)
 	} else {
