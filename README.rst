@@ -17,7 +17,8 @@ Usage
 -----
 
 Call
-::
+
+.. code-block:: sh
 
   jfy ls -l
 
