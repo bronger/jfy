@@ -22,3 +22,8 @@ Call
   jfy ls -l
 
 to get ls’ long output as JSON.
+
+Signals sent to jfy are passed to the child process.  Stdin is passed to the
+child as well.  Stdout and stderr of the child are converted to JSON and sent
+to jfy’s stdout and stderr, respectively.  The exit code of the child is
+returned as jfy’s exit code.
