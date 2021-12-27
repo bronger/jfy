@@ -28,3 +28,29 @@ Signals sent to jfy are passed to the child process.  Stdin is passed to the
 child as well.  Stdout and stderr of the child are converted to JSON and sent
 to jfy’s stdout and stderr, respectively.  The exit code of the child is
 returned as jfy’s exit code.
+
+
+Settings
+--------
+
+You may influence jfy’s behaviour by settings the environment variable
+``JFY_SETTINGS`` to a JSON string, like this:
+
+.. code-block:: sh
+
+  JFY_SETTINGS='{"exitCode": 1}' jfy ls -l
+
+Alternatively:
+
+.. code-block:: sh
+
+  export JFY_SETTINGS='{"exitCode": 1}'
+  jfy ls -l
+
+Currently, only one settings exists, namely “exitCode”.  The default exit code
+of jfy (the one used if jfy encounters an error rather than the tool it wraps)
+is an arbitrary 221.  By using the setting “exitCode”, you can choose a code
+that is distinguishable from the code returned by the wrapped program.
+
+
+..  LocalWords:  jfy
