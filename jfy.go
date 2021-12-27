@@ -28,10 +28,15 @@ type settingsType struct {
 var settings settingsType
 
 func init() {
+	settings = settingsType{ExitCode: 221}
 	data := os.Getenv("JFY_SETTINGS")
 	if data != "" {
 		if err := json.Unmarshal([]byte(data), &settings); err != nil {
 			logger.Println(err)
+			os.Exit(221)
+		}
+		if settings.ExitCode < 1 || settings.ExitCode > 255 {
+			logger.Println("Invalid exit code in settings")
 			os.Exit(221)
 		}
 	}
@@ -40,7 +45,7 @@ func init() {
 func main() {
 	if len(os.Args) < 2 {
 		logger.Println("Too few arguments")
-		os.Exit(221)
+		os.Exit(settings.ExitCode)
 	}
 	cmd := exec.Command(os.Args[1], os.Args[2:]...)
 	go func() {
@@ -61,14 +66,14 @@ func main() {
 	cmd.Stderr = &stderrBuf
 	if err := cmd.Start(); err != nil {
 		logger.Println(err)
-		os.Exit(221)
+		os.Exit(settings.ExitCode)
 	}
 	if err := cmd.Wait(); err != nil {
 		if ee, ok := err.(*exec.ExitError); ok {
 			os.Exit(ee.ProcessState.ExitCode())
 		} else {
 			logger.Println(err)
-			os.Exit(221)
+			os.Exit(settings.ExitCode)
 		}
 	}
 	stdout := stdoutBuf.Bytes()
@@ -79,17 +84,17 @@ func main() {
 	}
 	if data, dataErr, err := handler(stdout, stderr, os.Args[2:]...); err != nil {
 		logger.Println(err)
-		os.Exit(221)
+		os.Exit(settings.ExitCode)
 	} else {
 		if serializedJSON, err := json.Marshal(data); err != nil {
 			logger.Println(err)
-			os.Exit(221)
+			os.Exit(settings.ExitCode)
 		} else {
 			fmt.Printf("%s\n", serializedJSON)
 		}
 		if serializedJSON, err := json.Marshal(dataErr); err != nil {
 			logger.Println(err)
-			os.Exit(221)
+			os.Exit(settings.ExitCode)
 		} else {
 			logger.Printf("%s", serializedJSON)
 		}
