@@ -33,7 +33,7 @@ returned as jfy’s exit code.
 Settings
 --------
 
-You may influence jfy’s behaviour by settings the environment variable
+You may influence jfy’s behaviour by setting the environment variable
 ``JFY_SETTINGS`` to a JSON string, like this:
 
 .. code-block:: sh
