@@ -21,6 +21,22 @@ var dispatchers = map[string]dispatcher{
 	"true": ls.Handle,
 }
 
+type settingsType struct {
+	ExitCode int
+}
+
+var settings settingsType
+
+func init() {
+	data := os.Getenv("JFY_SETTINGS")
+	if data != "" {
+		if err := json.Unmarshal([]byte(data), &settings); err != nil {
+			logger.Println(err)
+			os.Exit(221)
+		}
+	}
+}
+
 func main() {
 	if len(os.Args) < 2 {
 		logger.Println("Too few arguments")
