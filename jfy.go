@@ -15,9 +15,9 @@ import (
 
 var logger = log.New(os.Stderr, "", 0)
 
-type Dispatcher func(stdout, stderr []byte, args ...string) (any, any, error)
+type dispatcher func(stdout, stderr []byte, args ...string) (any, any, error)
 
-var Dispatchers = map[string]Dispatcher{
+var dispatchers = map[string]dispatcher{
 	"true": ls.Handle,
 }
 
@@ -57,7 +57,7 @@ func main() {
 	}
 	stdout := stdoutBuf.Bytes()
 	stderr := stderrBuf.Bytes()
-	handler := Dispatchers[os.Args[1]]
+	handler := dispatchers[os.Args[1]]
 	if handler == nil {
 		panic("No handler found")
 	}
