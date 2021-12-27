@@ -47,10 +47,29 @@ Alternatively:
   export JFY_SETTINGS='{"exitCode": 1}'
   jfy ls -l
 
-Currently, only one settings exists, namely “exitCode”.  The default exit code
-of jfy (the one used if jfy encounters an error rather than the tool it wraps)
-is an arbitrary 221.  By using the setting “exitCode”, you can choose a code
-that is distinguishable from the code returned by the wrapped program.
+
+exitCode
+........
+
+The default exit code of jfy (the one used if jfy encounters an error rather
+than the tool it wraps) is an arbitrary 221.  By using the setting “exitCode”,
+you can choose a code that is distinguishable from the code returned by the
+wrapped program.
+
+
+version
+.......
+
+By default, jfy uses the latest version of the respective output transformer.
+But the transformation code may be under development and its coverage of the
+respective wrapped program’s output may improve.  At the same time, your
+scripts may depend on the former JSON data structure.  Therefore, you can
+request for a certain version of the JSON structure.
+
+This version can be passed in the “version” setting.  Its format is
+``YYYYMMDD``, i.e., a date.  Just pass the date version of the jfy that you are
+using, and you should be safe.  Its default value is the special number
+99999999, which means to take the latest version.
 
 
 ..  LocalWords:  jfy Stdout stderr JSONification cp mv jq ls’ Stdin jfy’s

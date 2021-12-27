@@ -23,7 +23,7 @@ var dispatchers = map[string]lib.Dispatcher{
 var settings lib.SettingsType
 
 func init() {
-	settings = lib.SettingsType{ExitCode: 221}
+	settings = lib.SettingsType{ExitCode: 221, Version: 99999999}
 	data := os.Getenv("JFY_SETTINGS")
 	if data != "" {
 		if err := json.Unmarshal([]byte(data), &settings); err != nil {
@@ -33,6 +33,10 @@ func init() {
 		if settings.ExitCode < 1 || settings.ExitCode > 255 {
 			logger.Println("Invalid exit code in settings")
 			os.Exit(221)
+		}
+		if settings.Version < 0 || settings.Version > 99999999 {
+			logger.Println("Invalid version number in settings")
+			os.Exit(settings.ExitCode)
 		}
 	}
 }

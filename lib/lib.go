@@ -4,4 +4,5 @@ type Dispatcher func(settings SettingsType, stdout, stderr []byte, args ...strin
 
 type SettingsType struct {
 	ExitCode int
+	Version  int
 }
