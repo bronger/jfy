@@ -22,6 +22,10 @@ var Dispatchers = map[string]Dispatcher{
 }
 
 func main() {
+	if len(os.Args) < 2 {
+		logger.Println("Too few arguments")
+		os.Exit(221)
+	}
 	cmd := exec.Command(os.Args[1], os.Args[2:]...)
 	go func() {
 		signals := make(chan os.Signal, 32)
