@@ -53,4 +53,5 @@ is an arbitrary 221.  By using the setting “exitCode”, you can choose a code
 that is distinguishable from the code returned by the wrapped program.
 
 
-..  LocalWords:  jfy
+..  LocalWords:  jfy Stdout stderr JSONification cp mv jq ls’ Stdin jfy’s
+..  LocalWords:  stdout exitCode
