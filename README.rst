@@ -72,5 +72,53 @@ using, and you should be safe.  Its default value is the special number
 99999999, which means to take the latest version.
 
 
+How to contribute a wrapper
+---------------------------
+
+You create a directory with the name of the program to wrap.  It must contain a
+Go package of the same name, with at least a ``Handle`` function.  Its
+signature is:
+
+.. code-block:: go
+
+   func Handle(settings lib.SettingsType, stdout, stderr []byte,
+               args ...string) (output any, errors any, err error) {
+
+Add this handler to the ``dispatchers`` map in the main program.  The
+parameters and return values mean the following:
+
+``settings``
+  The global settings, like “ExitCode” and “Version” (see `Settings`_).
+
+``stdout``
+  The raw stdout content of the wrapped program.
+
+``stderr``
+  The raw stderr content of the wrapped program.
+
+``args``
+  The command line arguments passed to the wrapped program.  Note that this
+  does not contain the program name.  For example, if jfy was invoked with
+  ``jfy ls -l``, ``args`` contains only ``{"-l"}``.
+
+``output``
+  An arbitrary Go data structure (well, it must be JSON-serialisable) that
+  represents stdout of the wrapped program completely.
+
+``errors``
+  An arbitrary Go data structure (it must be JSON-serialisable) that represents
+  stderr of the wrapped program completely.
+
+``err``
+  Any errors that occurred along the way.  Note that your handler must not
+  terminate jfy, nor must it send anything to stdout or stdin.
+
+Your directory should contain a README explaining the structures of ``output``
+and ``errors``.
+
+Then, you can create a PR for your addition.  Mind the AGPL this program is
+published under.  Thank you!
+
+
 ..  LocalWords:  jfy Stdout stderr JSONification cp mv jq ls’ Stdin jfy’s
 ..  LocalWords:  stdout exitCode
