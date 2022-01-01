@@ -131,8 +131,20 @@ parameters and return values mean the following:
 Your directory should contain a README explaining the structures of ``output``
 and ``errors``.
 
-Then, you can create a PR for your addition.  Mind the AGPL this program is
-published under.  Thank you!
+Your wrapper must return an error if it is not sure doing the right thing.  In particular,
+
+- variants of the wrapped program not handled by you (e.g. of another operating
+  system),
+- command line options affecting the output in a way not handled by you,
+- command line options unknown to you,
+- environment variables affecting the output in a way not handled by you
+  (e.g. ``LANG``)
+
+must make your code return an error.  Such checks can never be perfect but try
+to be as careful as possible.
+
+When you are finished, you are invited to create a PR for your addition.  Mind
+the AGPL this program is published under.  Thank you!
 
 
 ..  LocalWords:  jfy Stdout stderr JSONification cp mv jq ls’ Stdin jfy’s
