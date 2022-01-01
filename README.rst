@@ -16,13 +16,13 @@ to extract what you want safely and conveniently.
 Status of this project
 ----------------------
 
-This project does not work at all yet.  I have not wrapped a single existing
-program.  I just created the common code which works as a dispatch for the
-wrappers.
+This project is in its early infancy.  I have only wrapped “uptime” because it
+is so simple.  Besides that, I just created the common code which works as a
+dispatch for the wrappers.
 
 I had the idea and wanted not to forget it.  Therefore, I started this
-repository.  When I have some time, I will create my first actual wrapper.  If
-you are interested, get in touch with me!
+repository.  When I have some time, I will create more wrappers.  If you are
+interested, get in touch with me!
 
 My personal priority is the Btrfs command line tool ``btrfs``.  It has
 extensive output but no ``--json`` option.  ``colormgr`` is another candidate.

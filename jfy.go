@@ -11,13 +11,13 @@ import (
 	"time"
 
 	"github.com/bronger/jfy/lib"
-	"github.com/bronger/jfy/ls"
+	"github.com/bronger/jfy/uptime"
 )
 
 var logger = log.New(os.Stderr, "", 0)
 
 var dispatchers = map[string]lib.Dispatcher{
-	"true": ls.Handle,
+	"uptime": uptime.Handle,
 }
 
 var settings lib.SettingsType
