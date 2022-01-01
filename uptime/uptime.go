@@ -11,6 +11,9 @@ import (
 )
 
 func MustAtoi(s string) int {
+	if s == "" {
+		return 0
+	}
 	if i, err := strconv.Atoi(s); err != nil {
 		panic(err)
 	} else {
@@ -35,23 +38,25 @@ func Handle(settings lib.SettingsType, stdout, stderr []byte, args ...string) (a
 	}
 
 	regex := regexp.MustCompile(
-		`^ (\d+):(\d+):(\d+) up (\d+):(\d+),  (\d+) users,  load average: ([0-9.]+), ([0-9.]+), ([0-9.]+)\n$`)
+		`^\s+(\d+):(\d+):(\d+) up (?:(\d+) days?,)?\s+(\d+):(\d+),  (\d+) users?,  ` +
+			`load average: ([0-9.]+), ([0-9.]+), ([0-9.]+)\n$`)
 	submatches := regex.FindStringSubmatch(string(stdout))
-	if len(submatches) != 10 {
+	if len(submatches) != 11 {
 		return nil, nil, errors.New("Could not parse output of uptime.  Wrong locale?")
 	}
 	var load1, load5, load15 float64
 	var err error
-	if load1, err = strconv.ParseFloat(submatches[7], 64); err != nil {
+	if load1, err = strconv.ParseFloat(submatches[8], 64); err != nil {
 		return nil, nil, errors.New("Could not parse output of uptime.")
 	}
-	if load5, err = strconv.ParseFloat(submatches[8], 64); err != nil {
+	if load5, err = strconv.ParseFloat(submatches[9], 64); err != nil {
 		return nil, nil, errors.New("Could not parse output of uptime.")
 	}
-	if load15, err = strconv.ParseFloat(submatches[9], 64); err != nil {
+	if load15, err = strconv.ParseFloat(submatches[10], 64); err != nil {
 		return nil, nil, errors.New("Could not parse output of uptime.")
 	}
 	return map[string]any{"hour": MustAtoi(submatches[1]), "minute": MustAtoi(submatches[2]),
-		"second": MustAtoi(submatches[3]), "hours": MustAtoi(submatches[4]), "minutes": MustAtoi(submatches[5]),
-		"users": MustAtoi(submatches[6]), "load1": load1, "load5": load5, "load15": load15}, nil, nil
+		"second": MustAtoi(submatches[3]), "days": MustAtoi(submatches[4]), "hours": MustAtoi(submatches[5]),
+		"minutes": MustAtoi(submatches[6]), "users": MustAtoi(submatches[7]),
+		"load1": load1, "load5": load5, "load15": load15}, nil, nil
 }
