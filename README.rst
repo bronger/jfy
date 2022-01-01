@@ -13,6 +13,27 @@ to extract what you want safely and conveniently.
 .. _jq: https://stedolan.github.io/jq/
 
 
+Example
+-------
+
+We all know the small UNIX tool “uptime”:
+
+.. code-block:: sh
+
+   $ uptime
+    17:25:40 up 20:39,  3 users,  load average: 0.02, 0.07, 0.10
+
+If you need the 1-minute load average, you can write:
+
+.. code-block:: sh
+
+   $ jfy uptime | jq .load1
+   0.02
+
+(Yes, ``cut -d " " -f1 /proc/loadavg`` would also work in this case.  But I
+needed a really simple tool for starting.)
+
+
 Status of this project
 ----------------------
 
