@@ -67,9 +67,10 @@ func main() {
 		logger.Println(err)
 		os.Exit(settings.ExitCode)
 	}
+	var exitCode int
 	if err := cmd.Wait(); err != nil {
 		if ee, ok := err.(*exec.ExitError); ok {
-			os.Exit(ee.ProcessState.ExitCode())
+			exitCode = ee.ProcessState.ExitCode()
 		} else {
 			logger.Println(err)
 			os.Exit(settings.ExitCode)
@@ -98,4 +99,5 @@ func main() {
 			logger.Printf("%s", serializedJSON)
 		}
 	}
+	os.Exit(exitCode)
 }
