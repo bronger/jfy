@@ -86,17 +86,21 @@ func main() {
 		logger.Println(err)
 		os.Exit(settings.ExitCode)
 	} else {
-		if serializedJSON, err := json.Marshal(data); err != nil {
-			logger.Println(err)
-			os.Exit(settings.ExitCode)
-		} else {
-			fmt.Printf("%s\n", serializedJSON)
+		if data != nil {
+			if serializedJSON, err := json.Marshal(data); err != nil {
+				logger.Println(err)
+				os.Exit(settings.ExitCode)
+			} else {
+				fmt.Printf("%s\n", serializedJSON)
+			}
 		}
-		if serializedJSON, err := json.Marshal(dataErr); err != nil {
-			logger.Println(err)
-			os.Exit(settings.ExitCode)
-		} else {
-			logger.Printf("%s", serializedJSON)
+		if dataErr != nil {
+			if serializedJSON, err := json.Marshal(dataErr); err != nil {
+				logger.Println(err)
+				os.Exit(settings.ExitCode)
+			} else {
+				logger.Printf("%s", serializedJSON)
+			}
 		}
 	}
 	os.Exit(exitCode)
