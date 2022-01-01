@@ -82,7 +82,7 @@ func main() {
 	if handler == nil {
 		panic("No handler found")
 	}
-	if data, dataErr, err := handler(settings, stdout, stderr, os.Args[2:]...); err != nil {
+	if data, dataErr, err := handler(settings, stdout, stderr, os.Args[1:]...); err != nil {
 		logger.Println(err)
 		os.Exit(settings.ExitCode)
 	} else {

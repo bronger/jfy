@@ -113,9 +113,8 @@ parameters and return values mean the following:
   The raw stderr content of the wrapped program.
 
 ``args``
-  The command line arguments passed to the wrapped program.  Note that this
-  does not contain the program name.  For example, if jfy was invoked with
-  ``jfy ls -l``, ``args`` contains only ``{"-l"}``.
+  The command line arguments passed to the wrapped program.  For example, if
+  jfy was invoked with ``jfy ls -l``, ``args`` contains only ``{"ls", "-l"}``.
 
 ``output``
   An arbitrary Go data structure (well, it must be JSON-serialisable) that
