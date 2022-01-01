@@ -80,7 +80,8 @@ func main() {
 	stderr := stderrBuf.Bytes()
 	handler := dispatchers[os.Args[1]]
 	if handler == nil {
-		panic("No handler found")
+		logger.Println("No handler found")
+		os.Exit(settings.ExitCode)
 	}
 	if data, dataErr, err := handler(settings, stdout, stderr, os.Args[1:]...); err != nil {
 		logger.Println(err)
