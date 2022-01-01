@@ -139,11 +139,13 @@ parameters and return values mean the following:
 
 ``output``
   An arbitrary Go data structure (well, it must be JSON-serialisable) that
-  represents stdout of the wrapped program completely.
+  represents stdout of the wrapped program completely.  Most often, it is of
+  type ``map[string]any``.
 
 ``errors``
   An arbitrary Go data structure (it must be JSON-serialisable) that represents
-  stderr of the wrapped program completely.
+  stderr of the wrapped program completely.  Most often, it is of type
+  ``map[string]any``.  It should be ``nil`` if there is no error output.
 
 ``err``
   Any errors that occurred along the way.  Note that your handler must not
