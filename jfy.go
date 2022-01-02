@@ -50,6 +50,7 @@ func main() {
 	go func() {
 		signals := make(chan os.Signal, 32)
 		signal.Notify(signals)
+		defer signal.Reset()
 		for cmd.ProcessState == nil {
 			sig := <-signals
 			for cmd.Process == nil {
@@ -57,7 +58,6 @@ func main() {
 			}
 			cmd.Process.Signal(sig)
 		}
-		signal.Reset()
 	}()
 	cmd.Stdin = os.Stdin
 	var stdoutBuf, stderrBuf bytes.Buffer
